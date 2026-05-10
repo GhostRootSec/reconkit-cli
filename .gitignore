@@ -33,3 +33,9 @@ config.json
 # OSINT tool output
 recon-results/
 *.log
+dist/
+
+# Build artifacts
+dist/
+build/
+*.spec
