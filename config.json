@@ -1,6 +1,0 @@
-{
-    "shodan_api_key": "",
-    "output_dir": "~/recon-results",
-    "nmap_args": "-sV -sC",
-    "aggressive": false
-}
