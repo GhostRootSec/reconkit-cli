@@ -1,0 +1,23 @@
+# Source code — keep out of this docs-only repo
+recon_cli/
+*.py
+*.spec
+
+# Build artifacts
+dist/
+build/
+
+# Python environments
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Config / keys
+config.json
+.env
+*.key
+
+# Archives
+*.zip
+*.tar.gz
