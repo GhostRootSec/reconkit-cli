@@ -2,8 +2,15 @@
 import asyncio
 import json
 import re
+import sys
+from pathlib import Path
 from typing import Optional
-from recon_cli.scanner_base import ScannerBase, ScanResult
+
+MODULE_DIR = Path(__file__).resolve().parent.parent
+if str(MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(MODULE_DIR))
+
+from scanner_base import ScannerBase, ScanResult
 
 class TheHarvesterScanner(ScannerBase):
     @classmethod
@@ -16,16 +23,17 @@ class TheHarvesterScanner(ScannerBase):
         }
 
     async def scan(self, target: str, config: dict) -> ScanResult:
+        host_target = self.normalize_host_target(target)
         result = ScanResult(
             scanner_name="theHarvester",
-            target=target,
+            target=host_target,
             success=False,
         )
 
         timeout = config.get("scan_timeout", 300)
         cmd = [
             "theHarvester",
-            "-d", target,
+            "-d", host_target,
             "-b", "all",
             "-f", "-",  # JSON output to stdout
         ]
@@ -35,13 +43,13 @@ class TheHarvesterScanner(ScannerBase):
         if rc == 0:
             result.success = True
             result.raw_output = stdout
-            result.parsed_data = self._parse(stdout)
+            result.parsed_data = self._parse(stdout, host_target)
         else:
             result.errors.append(f"theHarvester failed: {stderr}")
 
         return result
 
-    def _parse(self, output: str) -> dict:
+    def _parse(self, output: str, target: str) -> dict:
         """Parse theHarvester JSON output."""
         parsed = {
             "emails": [],
@@ -49,6 +57,7 @@ class TheHarvesterScanner(ScannerBase):
             "subdomains": [],
             "ips": [],
         }
+        root_domain = ".".join(target.split(".")[-2:]) if "." in target else target
 
         try:
             data = json.loads(output)
@@ -64,7 +73,8 @@ class TheHarvesterScanner(ScannerBase):
         except (json.JSONDecodeError, KeyError):
             # Fallback: regex parse
             emails = re.findall(r'[\w.+-]+@[\w-]+\.[\w.-]+', output)
-            hosts = re.findall(r'(?:^|\s)([a-zA-Z0-9.-]+\.' + re.escape(target.split('.')[-2] + '.' + target.split('.')[-1]) + r')', output)
+            domain_pattern = re.escape(root_domain)
+            hosts = re.findall(r'(?:^|\s)([a-zA-Z0-9.-]+\.' + domain_pattern + r')', output) if root_domain else []
             ips = re.findall(r'\b(?:\d{1,3}\.){3}\d{1,3}\b', output)
             parsed["emails"] = list(set(emails))
             parsed["hosts"] = list(set(hosts))

@@ -1,8 +1,15 @@
 """WhatWeb scanner — web technology fingerprinting."""
 import asyncio
 import json
+import sys
+from pathlib import Path
 from typing import Optional
-from recon_cli.scanner_base import ScannerBase, ScanResult
+
+MODULE_DIR = Path(__file__).resolve().parent.parent
+if str(MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(MODULE_DIR))
+
+from scanner_base import ScannerBase, ScanResult
 
 class WhatWebScanner(ScannerBase):
     @classmethod
@@ -15,9 +22,10 @@ class WhatWebScanner(ScannerBase):
         }
 
     async def scan(self, target: str, config: dict) -> ScanResult:
+        url_target = self.normalize_url_target(target)
         result = ScanResult(
             scanner_name="WhatWeb",
-            target=target,
+            target=url_target,
             success=False,
         )
 
@@ -29,7 +37,7 @@ class WhatWebScanner(ScannerBase):
             result.errors.append("whatweb not found in PATH")
             return result
 
-        cmd = ["whatweb", "-a", "3", "--log-json=-", target]
+        cmd = ["whatweb", "-a", "3", "--log-json=-", url_target]
         stdout, stderr, rc = self.run_command(cmd, timeout=timeout)
 
         result.raw_output = stdout

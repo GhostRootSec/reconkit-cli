@@ -21,7 +21,6 @@ SYSTEM_DEPS = {
 # Python packages (module_name: pip_package_name)
 PYTHON_DEPS = {
     "rich": "rich",
-    "aiofiles": "aiofiles",
 }
 
 
@@ -63,7 +62,7 @@ def print_report(missing_system: List[str], missing_python: List[str]) -> bool:
         console.print(Panel(
             "[bold green]✅ All dependencies satisfied[/bold green]\n"
             "[dim]System tools: nmap, whatweb, theHarvester, wpscan, wfuzz[/dim]\n"
-            "[dim]Python packages: rich, aiofiles[/dim]",
+            "[dim]Python packages: rich[/dim]",
             title="recon-cli Dependency Check",
             border_style="green",
         ))

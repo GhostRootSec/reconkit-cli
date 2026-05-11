@@ -1,8 +1,15 @@
 """WPScan scanner — WordPress vulnerability detection."""
 import asyncio
 import json
+import sys
+from pathlib import Path
 from typing import Optional
-from recon_cli.scanner_base import ScannerBase, ScanResult
+
+MODULE_DIR = Path(__file__).resolve().parent.parent
+if str(MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(MODULE_DIR))
+
+from scanner_base import ScannerBase, ScanResult
 
 class WPScanScanner(ScannerBase):
     @classmethod
@@ -15,9 +22,10 @@ class WPScanScanner(ScannerBase):
         }
 
     async def scan(self, target: str, config: dict) -> ScanResult:
+        url_target = self.normalize_url_target(target)
         result = ScanResult(
             scanner_name="WPScan",
-            target=target,
+            target=url_target,
             success=False,
         )
 
@@ -29,7 +37,7 @@ class WPScanScanner(ScannerBase):
             return result
 
         api_token = config.get("wpscan_api_key", "")
-        cmd = ["wpscan", "--url", target, "--format", "json", "--no-banner"]
+        cmd = ["wpscan", "--url", url_target, "--format", "json", "--no-banner"]
         if api_token:
             cmd.extend(["--api-token", api_token])
 

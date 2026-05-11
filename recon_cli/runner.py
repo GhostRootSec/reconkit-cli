@@ -1,18 +1,26 @@
 """Orchestration engine — runs all scanners and collects results."""
 import asyncio
 import os
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlparse
 
-from recon_cli.scanner_base import ScanResult
-from recon_cli.scanners.theharvester import TheHarvesterScanner
-from recon_cli.scanners.shodan_scanner import ShodanScanner
-from recon_cli.scanners.nmap_scanner import NmapScanner
-from recon_cli.scanners.whatweb_scanner import WhatWebScanner
-from recon_cli.scanners.wpscan_scanner import WPScanScanner
-from recon_cli.scanners.wfuzz_scanner import WFuzzScanner
-from recon_cli.report import ReportGenerator
+from rich.table import Table
+
+MODULE_DIR = Path(__file__).resolve().parent
+if str(MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(MODULE_DIR))
+
+from scanner_base import ScanResult
+from scanners.theharvester import TheHarvesterScanner
+from scanners.shodan_scanner import ShodanScanner
+from scanners.nmap_scanner import NmapScanner
+from scanners.whatweb_scanner import WhatWebScanner
+from scanners.wpscan_scanner import WPScanScanner
+from scanners.wfuzz_scanner import WFuzzScanner
+from report import ReportGenerator
 
 # Map of scanner names to classes
 SCANNERS = {
@@ -37,7 +45,9 @@ class ReconRunner:
         # Setup output directory
         output_base = Path(config.get("output_dir", "~/recon-results")).expanduser()
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        safe_target = target.replace(".", "_")
+        parsed_target = urlparse(target if "://" in target else f"//{target}")
+        safe_target_source = parsed_target.hostname or target
+        safe_target = safe_target_source.replace(".", "_")
         self.output_dir = output_base / safe_target / timestamp
         self.output_dir.mkdir(parents=True, exist_ok=True)
 

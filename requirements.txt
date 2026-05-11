@@ -1,2 +1,1 @@
 rich>=13.0
-aiofiles>=24.0

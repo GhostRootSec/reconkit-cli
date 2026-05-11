@@ -1,8 +1,15 @@
 """Shodan scanner — exposed services & vulnerability lookup."""
 import asyncio
 import os
+import sys
+from pathlib import Path
 from typing import Optional
-from recon_cli.scanner_base import ScannerBase, ScanResult
+
+MODULE_DIR = Path(__file__).resolve().parent.parent
+if str(MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(MODULE_DIR))
+
+from scanner_base import ScannerBase, ScanResult
 
 class ShodanScanner(ScannerBase):
     @classmethod
@@ -15,9 +22,10 @@ class ShodanScanner(ScannerBase):
         }
 
     async def scan(self, target: str, config: dict) -> ScanResult:
+        host_target = self.normalize_host_target(target)
         result = ScanResult(
             scanner_name="Shodan",
-            target=target,
+            target=host_target,
             success=False,
         )
 
@@ -34,7 +42,7 @@ class ShodanScanner(ScannerBase):
 
         try:
             api = shodan.Shodan(api_key)
-            search_result = api.search(target)
+            search_result = api.search(host_target)
 
             result.success = True
             result.parsed_data = {

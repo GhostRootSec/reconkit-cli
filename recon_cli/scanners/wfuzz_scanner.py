@@ -1,7 +1,14 @@
 """WFuzz scanner — directory and parameter fuzzing."""
 import asyncio
+import sys
+from pathlib import Path
 from typing import Optional
-from recon_cli.scanner_base import ScannerBase, ScanResult
+
+MODULE_DIR = Path(__file__).resolve().parent.parent
+if str(MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(MODULE_DIR))
+
+from scanner_base import ScannerBase, ScanResult
 
 class WFuzzScanner(ScannerBase):
     @classmethod
@@ -14,9 +21,10 @@ class WFuzzScanner(ScannerBase):
         }
 
     async def scan(self, target: str, config: dict) -> ScanResult:
+        url_target = self.normalize_url_target(target)
         result = ScanResult(
             scanner_name="WFuzz",
-            target=target,
+            target=url_target,
             success=False,
         )
 
@@ -28,7 +36,7 @@ class WFuzzScanner(ScannerBase):
             return result
 
         # Quick directory fuzz with common wordlist
-        url = f"http://{target}/FUZZ"
+        url = f"{url_target.rstrip('/')}/FUZZ"
         cmd = [
             "wfuzz",
             "-w", "/usr/share/seclists/Discovery/Web-Content/common.txt",

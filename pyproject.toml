@@ -12,7 +12,6 @@ recon-cli = "recon_cli.cli:main"
 [tool.poetry.dependencies]
 python = "^3.10"
 rich = "^13.0"
-aiofiles = "^24.0"
 
 [build-system]
 requires = ["poetry-core"]

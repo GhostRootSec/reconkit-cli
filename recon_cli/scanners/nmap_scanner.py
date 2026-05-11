@@ -1,8 +1,15 @@
 """Nmap scanner — port scanning and service detection."""
 import asyncio
+import sys
 import xml.etree.ElementTree as ET
+from pathlib import Path
 from typing import Optional
-from recon_cli.scanner_base import ScannerBase, ScanResult
+
+MODULE_DIR = Path(__file__).resolve().parent.parent
+if str(MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(MODULE_DIR))
+
+from scanner_base import ScannerBase, ScanResult
 
 class NmapScanner(ScannerBase):
     @classmethod
@@ -17,9 +24,10 @@ class NmapScanner(ScannerBase):
     async def scan(self, target: str, config: str | dict = None) -> ScanResult:
         if isinstance(config, dict):
             pass
+        host_target = self.normalize_host_target(target)
         result = ScanResult(
             scanner_name="nmap",
-            target=target,
+            target=host_target,
             success=False,
         )
 
@@ -27,8 +35,8 @@ class NmapScanner(ScannerBase):
         nmap_args = conf.get("nmap_args", "-sV -sC")
         timeout = conf.get("scan_timeout", 300)
 
-        output_file = f"/tmp/nmap_{target.replace('.', '_')}.xml"
-        cmd_str = f"nmap {nmap_args} -oX {output_file} --host-timeout 300s {target} 2>&1"
+        output_file = f"/tmp/nmap_{host_target.replace('.', '_')}.xml"
+        cmd_str = f"nmap {nmap_args} -oX {output_file} --host-timeout 300s {host_target} 2>&1"
 
         # Check if nmap exists
         import shutil
@@ -44,7 +52,7 @@ class NmapScanner(ScannerBase):
             try:
                 tree = ET.parse(output_file)
                 root = tree.getroot()
-                result.parsed_data = self._parse_xml(root, target)
+                result.parsed_data = self._parse_xml(root, host_target)
                 result.success = True
             except Exception as e:
                 result.parsed_data = {}

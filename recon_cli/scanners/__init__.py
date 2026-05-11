@@ -1,16 +1,10 @@
 """Scanner modules."""
-from recon_cli.scanners.theharvester import TheHarvesterScanner
-from recon_cli.scanners.shodan_scanner import ShodanScanner
-from recon_cli.scanners.nmap_scanner import NmapScanner
-from recon_cli.scanners.whatweb_scanner import WhatWebScanner
-from recon_cli.scanners.wpscan_scanner import WPScanScanner
-from recon_cli.scanners.wfuzz_scanner import WFuzzScanner
 
-__all__ = [
-    "TheHarvesterScanner",
-    "ShodanScanner",
-    "NmapScanner",
-    "WhatWebScanner",
-    "WPScanScanner",
-    "WFuzzScanner",
-]
+from .theharvester import TheHarvesterScanner
+from .shodan_scanner import ShodanScanner
+from .nmap_scanner import NmapScanner
+from .whatweb_scanner import WhatWebScanner
+from .wpscan_scanner import WPScanScanner
+from .wfuzz_scanner import WFuzzScanner
+
+__all__ = ["TheHarvesterScanner","ShodanScanner","NmapScanner","WhatWebScanner","WPScanScanner","WFuzzScanner"]
