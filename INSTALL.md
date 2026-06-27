@@ -14,6 +14,9 @@ The included README covers:
 - Optional configuration via `~/.reconkit-cli/config.json`
 - Usage examples
 
+Command name used in examples:
+reconkit-cli
+
 ## Purchase / re-download
 
 If you need to re-download your copy:

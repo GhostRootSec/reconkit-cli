@@ -1,5 +1,9 @@
 # Changelog — Reconkit-CLI
 
+## [1.0.1] — 2026-06-26
+
+- Renamed canonical command from recon-cli to reconkit-cli to avoid conflict with recon-ng package naming.
+
 ## [1.0.0] — 2025-05-11
 
 Initial public release.
