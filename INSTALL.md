@@ -1,10 +1,10 @@
 # Installation — Reconkit-CLI
 
-Thank you for purchasing Reconkit-CLI!
+Reconkit-CLI is maintained as a personal-use tool.
 
 ## Setup instructions
 
-Full installation instructions are included in the **README.md** file inside your Gumroad ZIP download.
+Full installation instructions are included in the local **README.md** for personal setup.
 
 The included README covers:
 
@@ -17,12 +17,6 @@ The included README covers:
 Command name used in examples:
 reconkit-cli
 
-## Purchase / re-download
-
-If you need to re-download your copy:
-
-https://ghostpentest.gumroad.com/l/vxfuad
-
 ## Support
 
-For issues or questions, contact via the Gumroad product page.
+For issues or questions, use the repository issue tracker.

@@ -5,8 +5,7 @@ Reconkit-CLI is a lightweight command-line tool for authorized OSINT and reconna
 Primary command name:
 reconkit-cli
 
-Available here:
-https://ghostpentest.gumroad.com/l/vxfuad
+This repository tracks the write-up and release notes for a personal-use tool.
 
 ## What it does
 
@@ -16,10 +15,9 @@ Reconkit-CLI helps organize common reconnaissance and OSINT tasks from a command
 
 Reconkit-CLI is intended only for systems, domains, and targets you own or have explicit permission to test.
 
-## Purchase
+## Project status
 
-The full tool is available on Gumroad:
-https://ghostpentest.gumroad.com/l/vxfuad
+This project is maintained as a personal tool with documentation and write-ups.
 
 ## Quick check
 
