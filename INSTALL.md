@@ -1,6 +1,6 @@
-# Installation — Recon-CLI
+# Installation — Reconkit-CLI
 
-Thank you for purchasing Recon-CLI!
+Thank you for purchasing Reconkit-CLI!
 
 ## Setup instructions
 
@@ -11,7 +11,7 @@ The included README covers:
 - System requirements
 - Installing required system tools (nmap, whatweb, theHarvester, etc.)
 - Installing the binary and adding it to your PATH
-- Optional configuration via `~/.recon-cli/config.json`
+- Optional configuration via `~/.reconkit-cli/config.json`
 - Usage examples
 
 ## Purchase / re-download
